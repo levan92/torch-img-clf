@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Simple straightfoward repo for simple task of image classsification. Uses yaml config files to set hyperparameters for training. And loads data through list-style datasets.
+Simple straightfoward repo for simple task of image classsification. Uses yaml config files to set hyperparameters for training. And loads data through list-style datasets. Training logs are written to console and also to tensorboard. 
 
 ## To Train
 
