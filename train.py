@@ -21,7 +21,6 @@ from test import test_model
 PHASES = ['train', 'val']
 
 def train_model(model, dataloaders, losses, optimizer, scheduler, writer, config):
-# def train_model(model, dataloaders, criterion_train, criterion_valid, optimizer, scheduler, num_epochs=25, device='cuda:0', verbose_step=500, early_stopping_threshold=3):
     num_epochs = config['training']['num_epochs']
     device = config['training']['device']
     verbose_steps = config['training']['verbose_steps']
@@ -81,17 +80,23 @@ def train_model(model, dataloaders, losses, optimizer, scheduler, writer, config
                             loss.backward()
                             optimizer.step()
 
+                            global_step = epoch * total_steps_per_epoch + (step+1)
+                            writer.add_scalar(f"Loss/{phase}", loss.item(), global_step)
+
                     # statistics
                     running_loss += loss.item() * inputs.size(0)
                     running_corrects += torch.sum(preds == labels.data)
-                
+
                     if phase == 'train' and (step+1) % verbose_steps == 0:
                         num_imgs_so_far = (step+1)*dataloaders['train'].batch_size
                         verbose_loss = running_loss / num_imgs_so_far
                         verbose_acc = running_corrects.double() /num_imgs_so_far
 
                         print('[{}] Step: {}/{} | Loss: {:.4f} Acc: {:.4f}'.format(phase, step+1, total_steps_per_epoch, verbose_loss, verbose_acc))
-                
+
+                        writer.flush()
+
+
                 if phase == 'train':
                     scheduler.step()
                     lr_now = scheduler.get_last_lr()
@@ -103,8 +108,8 @@ def train_model(model, dataloaders, losses, optimizer, scheduler, writer, config
                 print('[{}] Loss: {:.4f} Acc: {:.4f}'.format(
                     phase, epoch_loss, epoch_acc))
                 
-                writer.add_scalar(f"Loss/{phase}", epoch_loss, epoch)
-                writer.add_scalar(f"Accuracy/{phase}", epoch_acc, epoch)
+                writer.add_scalar(f"EpochLoss/{phase}", epoch_loss, epoch)
+                writer.add_scalar(f"EpochAccuracy/{phase}", epoch_acc, epoch)
                 writer.flush()
 
                 # checkpointing / early stoppping logic
@@ -139,8 +144,6 @@ def train_model(model, dataloaders, losses, optimizer, scheduler, writer, config
         model.load_state_dict(best_model_wts)
 
     return model, best_acc, best_loss, best_epoch, epoch
-
-
 
 def viz_to_tb(dataloader, writer, num_classes, display_num=4):
     from collections import defaultdict

@@ -33,7 +33,7 @@ def get_data_loaders_from_config(config):
 
     dataloaders_dict = {}
     for phase, dataset in phase2dataset.items():
-        dataloaders_dict[phase] = DataLoader( dataset, batch_size=bs, shuffle=phase2shuffle[phase], num_workers=num_workers, sampler=None )
+        dataloaders_dict[phase] = DataLoader( dataset, batch_size=bs, shuffle=phase2shuffle[phase], num_workers=num_workers, sampler=None, pin_memory=True )
 
     return dataloaders_dict, phase2dataset['train'].classes
 
