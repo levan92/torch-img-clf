@@ -4,6 +4,27 @@
 
 Simple straightfoward repo for simple task of image classsification. Uses yaml config files to set hyperparameters for training. And loads data through list-style datasets. Training logs are written to console and also to tensorboard. 
 
+## Dataset Format
+
+Each dataset (train/val/test) is defined in csv files:
+
+```txt
+<path to image>,<class name>
+...
+...
+...
+<path to image>,<class name>
+```
+
+Accompanied by class names in `classes.txt` 
+
+```txt
+classA
+classB
+...
+classZ
+```
+
 ## To Train
 
 1. Copy `configs/config-example.yaml` and modify accordingly.
