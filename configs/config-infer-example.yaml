@@ -1,0 +1,16 @@
+datasets:
+    classes:
+        num_classes: 3
+        classes_txt: /path/to/classes.txt
+    
+model:
+    architecture: resnet18 # resnet18/resnet50/resnext50
+    weights: /path/to/weights.pth
+    input_size: 
+        - 224
+        - 224
+
+infer:
+    device: 'cuda:0'
+    batch_size: 1024
+    bgr: true # input images expected to be bgr or not (rgb). If using cv2 to read images then this should be true, if PIL then this should be false.  
