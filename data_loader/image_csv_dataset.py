@@ -76,6 +76,15 @@ class ImageCSVDataset(VisionDataset):
             target = self.target_transform(target)
         return sample, target
 
+class ImageCSVDatasetWithPath(ImageCSVDataset):
+    def __getitem__(self, idx):
+        path, target = self.samples[idx]
+        sample = self.loader(path)
+        if self.transform is not None:
+            sample = self.transform(sample)
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+        return sample, target, path
 
 if __name__ =='__main__':
     csv_path  = '/media/dh/HDD/person/KAIST_Multispectral_Pedestrian_Detection_Benchmark/KAIST_DH/kaist_day_train.csv'

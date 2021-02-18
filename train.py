@@ -194,7 +194,7 @@ def main(args):
     torch.save(model.state_dict(), save_path)
     print(f'Best val weights saved to {save_path}')
 
-    conf_mat, report = test_model(model, dataloaders['test'], config,  classes=classes)
+    conf_mat, report, _, _, _ = test_model(model, dataloaders['test'], config,  classes=classes)
     
     test_dir = out_dir / 'test'
     test_dir.mkdir(exist_ok=True, parents=True)
